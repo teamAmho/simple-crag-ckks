@@ -94,6 +94,10 @@ Each script prints a Markdown-formatted results table at the end, matching the f
     └── benchmark_matrix_mul.py      # Matrix multiplication benchmark
 ```
 
+## Acknowledgements
+
+The sample corpus `cat-facts.txt` is from [ngxson/demo_simple_rag_py](https://huggingface.co/ngxson/demo_simple_rag_py) (MIT License).
+
 ## Citation
 
 *(BibTeX will be added upon publication)*
