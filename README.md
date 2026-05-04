@@ -1,4 +1,4 @@
-# GPU-Accelerated CKKS for Private RAG
+# FRAG: FHE-friendly RAG
 
 > **Paper:** *(link will be added upon publication)*
 
