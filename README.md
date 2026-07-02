@@ -1,4 +1,4 @@
-# FRAG: FHE-friendly RAG
+# CRAG:  CKKS-friendly retrieval-augmented generation framework
 
 > **Paper:** *(link will be added upon publication)*
 
