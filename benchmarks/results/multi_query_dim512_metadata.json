@@ -1,0 +1,20 @@
+{
+  "dim": 512,
+  "topks": [
+    4,
+    8,
+    16,
+    32
+  ],
+  "queries": [
+    "What is bezoar?",
+    "Who was the first cat sent into space?",
+    "Why can't cats climb down trees head first?",
+    "How fast can a cat run over a short distance?",
+    "Who invented the cat flap?"
+  ],
+  "document_count": 46,
+  "elapsed_seconds": 18.367438217999734,
+  "score_difference_alignment": "document index",
+  "boundary_ratio": "plaintext gap / (2 * max all-document score error)"
+}

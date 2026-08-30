@@ -11,6 +11,10 @@ data/*/keys/
 data/*/db/
 data/*/chroma/
 
+# Local benchmark artifacts
+*.npy
+.codex/
+
 # Distribution / packaging
 .Python
 build/
