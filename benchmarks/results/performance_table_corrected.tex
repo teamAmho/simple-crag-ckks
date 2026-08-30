@@ -1,0 +1,24 @@
+\begin{table}[hbt!]
+\centering
+\caption{Kernel-level performance of the core encrypted operations in CRAG}
+\label{tab:performance-results}
+\vspace{3pt}
+\begin{tabular}{cccccc}
+\hline
+\textbf{Dim.} & \textbf{Top-$k$} & \textbf{s (KB)} & \textbf{K (MB)} &
+\textbf{Dot Product (s)} & \textbf{MM Naive (s)} \\
+\hline
+\multirow{4}{*}{256}
+& 4  & 7.81  & 0.5 & 7.284608 & 81.365130 \\
+& 8  & 15.63 & 0.5 & 7.284608 & 159.898635 \\
+& 16 & 31.25 & 0.5 & 7.284608 & 324.895187 \\
+& 32 & 62.50 & 0.5 & 7.284608 & 644.670403 \\
+\hline
+\multirow{4}{*}{512}
+& 4  & 15.63  & 2.0 & 6.320171 & 168.416887 \\
+& 8  & 31.25  & 2.0 & 6.320171 & 363.091999 \\
+& 16 & 62.50  & 2.0 & 6.320171 & 736.669031 \\
+& 32 & 125.00 & 2.0 & 6.320171 & 1497.704098 \\
+\hline
+\end{tabular}
+\end{table}

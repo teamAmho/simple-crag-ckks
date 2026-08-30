@@ -1,0 +1,11 @@
+dim,run_type,run,seconds
+256,warmup,0,7.706523
+256,measured,1,7.480469
+256,measured,2,7.636524
+256,measured,3,7.125959
+256,measured,4,6.895478
+512,warmup,0,8.961058
+512,measured,1,6.370134
+512,measured,2,6.234733
+512,measured,3,6.441478
+512,measured,4,6.234336

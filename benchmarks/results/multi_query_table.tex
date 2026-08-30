@@ -1,0 +1,25 @@
+\begin{table}[hbt!]
+\centering
+\caption{Multi-query agreement between plaintext and encrypted retrieval.}
+\label{tab:multi-query-accuracy}
+\vspace{3pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{cccccccccc}
+\toprule
+\textbf{Dim.} & \textbf{Top-$k$} & \textbf{Queries} &
+\textbf{Top-$k$ agree.} & \textbf{Rank agree.} & \textbf{Full match} &
+\textbf{Mean score diff.} & \textbf{Max score diff.} &
+\textbf{Min. gap} & \textbf{Min. gap/$(2\epsilon_{\max})$} \\
+\midrule
+256 & 4 & 5 & 1.000 & 1.000 & 1.000 & $3.293 \times 10^{-8}$ & $9.904 \times 10^{-8}$ & $1.479 \times 10^{-3}$ & $7.468 \times 10^{3}$ \\
+256 & 8 & 5 & 1.000 & 1.000 & 1.000 & $3.241 \times 10^{-8}$ & $1.017 \times 10^{-7}$ & $1.371 \times 10^{-4}$ & $5.937 \times 10^{2}$ \\
+256 & 16 & 5 & 1.000 & 1.000 & 1.000 & $3.252 \times 10^{-8}$ & $1.020 \times 10^{-7}$ & $3.542 \times 10^{-4}$ & $2.876 \times 10^{3}$ \\
+256 & 32 & 5 & 1.000 & 1.000 & 1.000 & $2.971 \times 10^{-8}$ & $1.155 \times 10^{-7}$ & $1.550 \times 10^{-5}$ & $7.824 \times 10^{1}$ \\
+512 & 4 & 5 & 1.000 & 1.000 & 1.000 & $3.916 \times 10^{-8}$ & $9.979 \times 10^{-8}$ & $4.998 \times 10^{-4}$ & $3.836 \times 10^{3}$ \\
+512 & 8 & 5 & 1.000 & 1.000 & 1.000 & $3.506 \times 10^{-8}$ & $9.979 \times 10^{-8}$ & $8.231 \times 10^{-5}$ & $4.147 \times 10^{2}$ \\
+512 & 16 & 5 & 1.000 & 1.000 & 1.000 & $3.483 \times 10^{-8}$ & $1.170 \times 10^{-7}$ & $6.044 \times 10^{-4}$ & $2.941 \times 10^{3}$ \\
+512 & 32 & 5 & 1.000 & 1.000 & 1.000 & $3.426 \times 10^{-8}$ & $1.170 \times 10^{-7}$ & $1.231 \times 10^{-3}$ & $9.447 \times 10^{3}$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

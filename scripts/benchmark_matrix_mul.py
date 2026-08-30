@@ -67,7 +67,7 @@ def encrypted_dot(ct_a, ct_b, n, engine, rel_key, rot_key):
     return ct_sum
 
 
-def mm_naive_clean(encrypted_selectors, t_encrypted_db_cts, dim, engine, rel_key, rot_key):
+def mm_naive_clean(encrypted_selectors, col_db_cts, dim, engine, rel_key, rot_key):
     # Only the first and last ciphertext results are retained to avoid
     # holding all intermediate results in GPU memory simultaneously.
     first_result = None
@@ -76,7 +76,7 @@ def mm_naive_clean(encrypted_selectors, t_encrypted_db_cts, dim, engine, rel_key
     for r, enc_sel in enumerate(encrypted_selectors):
         row_start = time.perf_counter()
 
-        for ct_db in t_encrypted_db_cts:
+        for ct_db in col_db_cts:
             result = encrypted_dot(enc_sel, ct_db, dim, engine, rel_key, rot_key)
 
             if first_result is None:
@@ -92,10 +92,10 @@ def benchmark_mm_single(dim: int, top_k: int, repeat: int):
     base = ROOT / "data" / str(dim)
     key_dir = base / "keys"
     db_dir = base / "db"
-    trow_db_path = db_dir / "t_row_encrypted.db"
+    col_db_path = db_dir / "col_encrypted.db"
 
-    if not trow_db_path.exists():
-        raise FileNotFoundError(f"Missing DB file: {trow_db_path}")
+    if not col_db_path.exists():
+        raise FileNotFoundError(f"Missing DB file: {col_db_path}")
 
     engine = Engine(slot_count=dim, mode="gpu")
     secret_key = engine.read_secret_key(str(key_dir / "secret.key"))
@@ -103,18 +103,20 @@ def benchmark_mm_single(dim: int, top_k: int, repeat: int):
     rel_key = engine.read_relinearization_key(str(key_dir / "relin.key"))
     rot_key = engine.read_rotation_key(str(key_dir / "rotation.key"))
 
-    print(f"\n[DIM={dim}] loading transposed encrypted DB...")
-    t_encrypted_db_cts = load_ciphertexts_sqlite(trow_db_path, engine, "encrypted_vectors")
-    doc_count = len(t_encrypted_db_cts)
-    print(f"[DIM={dim}] loaded ciphertext rows: {doc_count}")
+    print(f"\n[DIM={dim}] loading column-oriented encrypted DB...")
+    col_db_cts = load_ciphertexts_sqlite(col_db_path, engine, "encrypted_vectors")
+    column_count = len(col_db_cts)
+    print(f"[DIM={dim}] loaded encrypted columns: {column_count}")
 
-    if top_k > doc_count:
-        raise ValueError(f"top_k={top_k} > doc_count={doc_count}")
+    if column_count != dim:
+        raise ValueError(f"Expected {dim} encrypted columns, found {column_count}")
+    if not 1 <= top_k <= dim:
+        raise ValueError(f"top_k must be between 1 and {dim}, got {top_k}")
 
     top_k_indices = list(range(top_k))
-    enc_selectors = create_selector_vector_encrypted(top_k_indices, doc_count, engine, public_key)
+    enc_selectors = create_selector_vector_encrypted(top_k_indices, dim, engine, public_key)
 
-    s_mb = calc_mb(top_k, doc_count)
+    s_mb = calc_mb(top_k, dim)
     k_mb = calc_mb(dim, dim)
 
     mm_times = []
@@ -123,7 +125,7 @@ def benchmark_mm_single(dim: int, top_k: int, repeat: int):
         start = time.perf_counter()
         mm_first, mm_last = mm_naive_clean(
             enc_selectors,
-            t_encrypted_db_cts,
+            col_db_cts,
             dim,
             engine,
             rel_key,

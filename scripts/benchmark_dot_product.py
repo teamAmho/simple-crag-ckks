@@ -68,14 +68,14 @@ def encrypted_dot(ct_a, ct_b, n, engine, rel_key, rot_key):
     return ct_sum
 
 
-def dot_product_clean(ct_query, t_encrypted_db_cts, dim, engine, rel_key, rot_key, show_progress=False):
+def dot_product_clean(ct_query, row_db_cts, dim, engine, rel_key, rot_key, show_progress=False):
     # Only the first and last ciphertext results are retained to avoid
     # holding all intermediate results in GPU memory simultaneously.
     first_result = None
     last_result = None
 
-    total = len(t_encrypted_db_cts)
-    for idx, ct_db in enumerate(t_encrypted_db_cts):
+    total = len(row_db_cts)
+    for idx, ct_db in enumerate(row_db_cts):
         if show_progress and idx % 32 == 0:
             print(f"  [dot] progress: {idx}/{total}", flush=True)
 
@@ -92,10 +92,10 @@ def benchmark_dot_single(dim: int, top_k: int, repeat: int, query: str = "What i
     base = ROOT / "data" / str(dim)
     key_dir = base / "keys"
     db_dir = base / "db"
-    trow_db_path = db_dir / "t_row_encrypted.db"
+    row_db_path = db_dir / "row_encrypted.db"
 
-    if not trow_db_path.exists():
-        raise FileNotFoundError(f"Missing DB file: {trow_db_path}")
+    if not row_db_path.exists():
+        raise FileNotFoundError(f"Missing DB file: {row_db_path}")
 
     engine = Engine(slot_count=dim, mode="gpu")
     secret_key = engine.read_secret_key(str(key_dir / "secret.key"))
@@ -103,10 +103,11 @@ def benchmark_dot_single(dim: int, top_k: int, repeat: int, query: str = "What i
     rel_key = engine.read_relinearization_key(str(key_dir / "relin.key"))
     rot_key = engine.read_rotation_key(str(key_dir / "rotation.key"))
 
-    print(f"\n[DIM={dim}] loading transposed encrypted DB...")
-    t_encrypted_db_cts = load_ciphertexts_sqlite(trow_db_path, engine, "encrypted_vectors")
-    doc_count = len(t_encrypted_db_cts)
-    print(f"[DIM={dim}] loaded ciphertext rows: {doc_count}")
+    print(f"\n[DIM={dim}] loading row-oriented encrypted document DB...")
+    row_db_cts = load_ciphertexts_sqlite(row_db_path, engine, "encrypted_vectors")
+    doc_count = len(row_db_cts)
+    print(f"[DIM={dim}] loaded document ciphertexts: {doc_count}")
+    print("[note] Top-k does not affect encrypted similarity computation time.")
 
     if top_k > doc_count:
         raise ValueError(f"top_k={top_k} > doc_count={doc_count}")
@@ -126,7 +127,7 @@ def benchmark_dot_single(dim: int, top_k: int, repeat: int, query: str = "What i
         start = time.perf_counter()
         dot_first, dot_last = dot_product_clean(
             ct_query,
-            t_encrypted_db_cts,
+            row_db_cts,
             dim,
             engine,
             rel_key,
