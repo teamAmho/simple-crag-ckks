@@ -42,8 +42,6 @@ def format_latex(rows: list[dict[str, str]]) -> str:
                     f"{float(row['full_rank_match_rate']):.3f}",
                     scientific_latex(row["mean_score_diff"]),
                     scientific_latex(row["max_score_diff"]),
-                    scientific_latex(row["min_boundary_gap"]),
-                    scientific_latex(row["min_gap_to_2maxerr_ratio"]),
                 ]
             )
             + r" \\"
@@ -57,12 +55,11 @@ def format_latex(rows: list[dict[str, str]]) -> str:
             r"\label{tab:multi-query-accuracy}",
             r"\vspace{3pt}",
             r"\resizebox{\textwidth}{!}{%",
-            r"\begin{tabular}{cccccccccc}",
+            r"\begin{tabular}{cccccccc}",
             r"\toprule",
-            r"\textbf{Dim.} & \textbf{Top-$k$} & \textbf{Queries} &",
-            r"\textbf{Top-$k$ agree.} & \textbf{Rank agree.} & \textbf{Full match} &",
-            r"\textbf{Mean score diff.} & \textbf{Max score diff.} &",
-            "\\textbf{Min. gap} & \\textbf{Min. gap/$(2\\epsilon_{\\max})$} \\\\",
+            r"\textbf{Embedding dimension} & \textbf{Top-$k$} & \textbf{Queries} &",
+            r"\textbf{Set agreement} & \textbf{Rank agreement} & \textbf{Full match} &",
+            r"\textbf{Mean score error} & \textbf{Max score error} \\",
             r"\midrule",
             *body,
             r"\bottomrule",
